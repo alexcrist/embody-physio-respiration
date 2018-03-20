@@ -11,5 +11,9 @@ A program that sorts respiration data into folders based on the files' names.
 ## How to Use
 
 - Clone this repository
-- Navigate to the repostiroy
+- Navigate to the repository
 - Run `python sort.py`
+
+## Questions
+
+Alex Crist - alexecrist@gmail.com
