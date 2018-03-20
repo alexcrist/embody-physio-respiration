@@ -6,6 +6,7 @@ A program that sorts respiration data into folders based on the files' names.
 
 - Python 2.7
 - [Pip](https://pip.pypa.io/en/stable/installing/)
+- [openpyxl](https://openpyxl.readthedocs.io/en/stable/#installation)
 
 ## How to Use
 
