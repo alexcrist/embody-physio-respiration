@@ -26,6 +26,6 @@ for i in range(num_rows):
   print ' - {}'.format(start_time)
   print ' - {}'.format(end_time)
   print
-  subprocess.call('./sort_helper.sh {} {} {} {}'.format(pid, date, start_time, end_time), shell=True)
+  subprocess.call('./sort_helper.sh {} {} {} {}'.format(pid, date, start_time, end_time, data_directory), shell=True)
 
 print 'Sorting complete!\n'
