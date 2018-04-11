@@ -1,7 +1,8 @@
-import subprocess
 from openpyxl import load_workbook
+import os
+import shutil
 
-filename = raw_input('Excel file name: ')
+filename = 'file'#raw_input('Excel file name: ')
 if '.xlsx' not in filename:
  filename += '.xlsx'
 
@@ -11,7 +12,26 @@ start_row = int(raw_input('Start row: '))
 end_row = int(raw_input('End row: '))
 num_rows = end_row - start_row + 1
 
-data_directory = raw_input('Data directory: ')
+data_dir = raw_input('Data directory: ')
+output_dir = raw_input('Output directory: ')
+
+def process(pid, date, start_time, end_time, data_dir, output_dir):
+  pid_dir = os.path.join(output_dir, str(pid))
+  if not os.path.exists(pid_dir):
+    os.makedirs(pid_dir)
+
+  start_time = int(start_time)
+  end_time = int(end_time)
+  files = os.listdir(data_dir);
+  for file in files:
+    file_date = file[7:15]
+    file_time = int(file[16:22])
+
+    if file_date == date:
+      if file_time > start_time and file_time < end_time:
+        file_path = os.path.join(data_dir, file)
+        output_path = os.path.join(pid_dir, file)
+        shutil.copyfile(file_path, output_path)
 
 for i in range(num_rows):
   index = str(i + start_row)
@@ -26,6 +46,9 @@ for i in range(num_rows):
   print ' - {}'.format(start_time)
   print ' - {}'.format(end_time)
   print
-  subprocess.call('./sort_helper.sh {} {} {} {}'.format(pid, date, start_time, end_time, data_directory), shell=True)
+
+  process(pid, date, start_time, end_time, data_dir, output_dir)
+
+  break
 
 print 'Sorting complete!\n'
