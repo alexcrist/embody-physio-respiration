@@ -24,14 +24,17 @@ def process(pid, date, start_time, end_time, data_dir, output_dir):
   end_time = int(end_time)
   files = os.listdir(data_dir);
   for file in files:
-    file_date = file[7:15]
-    file_time = int(file[16:22])
+    try:
+      file_date = file[7:15]
+      file_time = int(file[16:22])
 
-    if file_date == date:
-      if file_time > start_time and file_time < end_time:
-        file_path = os.path.join(data_dir, file)
-        output_path = os.path.join(pid_dir, file)
-        shutil.copyfile(file_path, output_path)
+      if file_date == date:
+        if file_time > start_time and file_time < end_time:
+          file_path = os.path.join(data_dir, file)
+          output_path = os.path.join(pid_dir, file)
+          shutil.copyfile(file_path, output_path)
+    catch:
+      print 'Ignoring file "' + file + '"'
 
 for i in range(num_rows):
   index = str(i + start_row)
