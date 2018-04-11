@@ -2,7 +2,7 @@ from openpyxl import load_workbook
 import os
 import shutil
 
-filename = 'file'#raw_input('Excel file name: ')
+filename = raw_input('Excel file name: ')
 if '.xlsx' not in filename:
  filename += '.xlsx'
 
