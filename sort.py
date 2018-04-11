@@ -52,6 +52,4 @@ for i in range(num_rows):
 
   process(pid, date, start_time, end_time, data_dir, output_dir)
 
-  break
-
 print 'Sorting complete!\n'
