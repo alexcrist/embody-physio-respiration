@@ -33,7 +33,7 @@ def process(pid, date, start_time, end_time, data_dir, output_dir):
           file_path = os.path.join(data_dir, file)
           output_path = os.path.join(pid_dir, file)
           shutil.copyfile(file_path, output_path)
-    catch:
+    except:
       print 'Ignoring file "' + file + '"'
 
 for i in range(num_rows):
