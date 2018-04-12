@@ -16,11 +16,8 @@ data_dir = raw_input('Data directory: ')
 output_dir = raw_input('Output directory: ')
 
 def process(pid, date, start_time, end_time, data_dir, output_dir):
-  pid_dir = os.path.join(output_dir, str(pid))
-  if not os.path.exists(pid_dir):
-    os.makedirs(pid_dir)
-
   stats = {}
+  stats['files_ignored'] = 0
   stats['files_searched'] = 0
   stats['date_matches'] = 0
   stats['time_matches'] = 0
@@ -33,21 +30,25 @@ def process(pid, date, start_time, end_time, data_dir, output_dir):
       file_date = file[7:15]
       file_time = int(file[16:22])
     except:
-      print 'Ignoring file "' + file + '"'
+      stats['files_ignored'] += 1
       continue
 
     stats['files_searched'] += 1
-    if file_date == date:
+    if int(file_date) == int(date):
       stats['date_matches'] += 1
       if file_time > start_time and file_time < end_time:
-        stats['time_mathes'] += 1
+        stats['time_matches'] += 1
+
+        pid_dir = os.path.join(output_dir, str(pid))
+        if not os.path.exists(pid_dir):
+          os.makedirs(pid_dir)
+        
         file_path = os.path.join(data_dir, file)
         output_path = os.path.join(pid_dir, file)
         shutil.copyfile(file_path, output_path)
 
   return stats
 
-stats = {}
 for i in range(num_rows):
   index = str(i + start_row)
   pid = workbook['A' + index].value
@@ -65,6 +66,7 @@ for i in range(num_rows):
   stats = process(pid, date, start_time, end_time, data_dir, output_dir)
 
   print 'Patient processed!'
+  print ' - # files ignored: {}'.format(stats['files_ignored'])
   print ' - # files searched: {}'.format(stats['files_searched'])
   print ' - # date matches: {}'.format(stats['date_matches'])
   print ' - # time matches: {}'.format(stats['time_matches'])
