@@ -20,6 +20,11 @@ def process(pid, date, start_time, end_time, data_dir, output_dir):
   if not os.path.exists(pid_dir):
     os.makedirs(pid_dir)
 
+  stats = {}
+  stats['files_searched'] = 0
+  stats['date_matches'] = 0
+  stats['time_matches'] = 0
+
   start_time = int(start_time)
   end_time = int(end_time)
   files = os.listdir(data_dir);
@@ -27,15 +32,22 @@ def process(pid, date, start_time, end_time, data_dir, output_dir):
     try:
       file_date = file[7:15]
       file_time = int(file[16:22])
-
-      if file_date == date:
-        if file_time > start_time and file_time < end_time:
-          file_path = os.path.join(data_dir, file)
-          output_path = os.path.join(pid_dir, file)
-          shutil.copyfile(file_path, output_path)
     except:
       print 'Ignoring file "' + file + '"'
+      continue
 
+    stats['files_searched'] += 1
+    if file_date == date:
+      stats['date_matches'] += 1
+      if file_time > start_time and file_time < end_time:
+        stats['time_mathes'] += 1
+        file_path = os.path.join(data_dir, file)
+        output_path = os.path.join(pid_dir, file)
+        shutil.copyfile(file_path, output_path)
+
+  return stats
+
+stats = {}
 for i in range(num_rows):
   index = str(i + start_row)
   pid = workbook['A' + index].value
@@ -44,12 +56,18 @@ for i in range(num_rows):
   end_time = workbook['D' + index].value
 
   print 'Processing patient data...'
-  print ' - {}'.format(pid)
-  print ' - {}'.format(date)
-  print ' - {}'.format(start_time)
-  print ' - {}'.format(end_time)
+  print ' - PID: {}'.format(pid)
+  print ' - Date: {}'.format(date)
+  print ' - Start time: {}'.format(start_time)
+  print ' - End time: {}'.format(end_time)
   print
 
-  process(pid, date, start_time, end_time, data_dir, output_dir)
+  stats = process(pid, date, start_time, end_time, data_dir, output_dir)
 
-print 'Sorting complete!\n'
+  print 'Patient processed!'
+  print ' - # files searched: {}'.format(stats['files_searched'])
+  print ' - # date matches: {}'.format(stats['date_matches'])
+  print ' - # time matches: {}'.format(stats['time_matches'])
+  print
+
+print 'Sorting complete!'
